@@ -4,7 +4,7 @@ class MessageNotFoundException(message: String) : RuntimeException(message)
 class ChatNotFoundException(message: String) : RuntimeException(message)
 class UserNotFoundException(message: String) : RuntimeException(message)
 
-object chatService {
+object ChatService {
     var chatId = 0
     var messageId = 0
     var messageChatId = 0
@@ -82,20 +82,11 @@ object chatService {
         if (targetChat == null) {
             throw ChatNotFoundException("Чат с указанным id '$chatId' не найден")
         } else {
-            val targetMessages = targetChat
-                    .messages.filter { it.id >= messageId }
+            return targetChat.messages.asSequence()
+                    .filter { it.id >= messageId }
                     .take(count)
-                    .toMutableList()
-            return readMessages(targetMessages)
+                    .map { it.copy(read = true) }
+                    .toList()
         }
-    }
-
-    fun readMessages(messages: MutableList<Message>): List<Message> {
-        for ((index, message) in messages.withIndex()) {
-            if (!message.read) {
-                messages[index] = message.copy(read = true)
-            }
-        }
-        return messages
     }
 }
