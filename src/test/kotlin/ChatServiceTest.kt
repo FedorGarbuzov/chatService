@@ -71,10 +71,4 @@ internal class ChatServiceTest {
         ChatService.createMessage(Message())
         ChatService.getMessages(0, 0, 1)
     }
-
-    @Test
-    fun readMessages() {
-        val messages = mutableListOf<Message>(Message())
-        ChatService.readMessages(messages)
-    }
 }
